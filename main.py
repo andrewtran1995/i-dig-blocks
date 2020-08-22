@@ -1,5 +1,6 @@
 import configparser
 import discord
+import cubedhost
 
 
 def main():
@@ -12,6 +13,7 @@ def main():
     @client.event
     async def on_ready():
         print(f'{client.user} has connected to Discord!')
+        # cubedhost.CubedHostClient().get_server_status()
 
     client.run(discord_bot_token)
 
