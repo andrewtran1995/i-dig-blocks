@@ -1,0 +1,12 @@
+[package]
+name = "discord-cubedhost-bot"
+version = "0.1.0"
+authors = ["andrewtran1995 <andrew.tran345@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+config = "0.10.1"
+reqwest = "0.10.8"
+serde = "1.0.116"
+serenity = "0.9.0-rc.1"
+tokio = "0.2.22"
