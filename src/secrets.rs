@@ -1,22 +1,22 @@
 use config::{ConfigError, File};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Secrets {
     pub cubed_host: CubedHost,
     pub discord: Discord,
 }
 
-#[derive(Debug, Deserialize)]
-struct CubedHost {
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CubedHost {
     pub api_key: String,
     pub api_user: String,
     pub server_id: String,
 }
 
-#[derive(Debug, Deserialize)]
-struct Discord {
-    pub client_id: String,
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Discord {
+    pub client_id: u64,
     pub client_secret: String,
     pub bot_token: String,
 }

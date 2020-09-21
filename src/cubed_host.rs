@@ -1,6 +1,7 @@
 use reqwest::header::HeaderMap;
+use reqwest::Response;
 
-const ENDPOINT: &str = "prisma.cubedhost.com/api";
+const ENDPOINT: &str = "https://prisma.cubedhost.com/api";
 
 enum Headers {
     ApiKey,
@@ -16,24 +17,28 @@ impl Headers {
     }
 }
 
-pub struct CubedHostClient<'a> {
-    pub server_id: &'a str,
-    pub api_key: &'a str,
-    pub api_user: &'a str,
+pub struct CubedHostClient {
+    pub server_id: String,
+    pub api_key: String,
+    pub api_user: String,
 }
 
-impl CubedHostClient<'_> {
-    pub async fn get_server_config(&self) -> () {
-        let body = reqwest::Client::new()
+impl CubedHostClient {
+    pub async fn get_server_config(&self) -> Result<reqwest::Response, reqwest::Error> {
+        reqwest::Client::new()
             .get(format!("{}/server/{}", ENDPOINT, self.server_id).as_str())
             .headers(self.construct_headers())
             .send()
             .await
-            .unwrap()
-            .text()
-            .await
-            .unwrap();
-        println!("{:?}", body)
+    }
+
+    pub async fn restart_server(&self) -> Result<Response, reqwest::Error> {
+        reqwest::Client::new()
+            .post(format!("{}/server/{}/restart", ENDPOINT, self.server_id).as_str())
+            .headers(self.construct_headers())
+            .send()
+            .await?
+            .error_for_status()
     }
 
     fn construct_headers(&self) -> HeaderMap {
