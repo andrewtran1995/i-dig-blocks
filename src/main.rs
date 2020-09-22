@@ -4,7 +4,7 @@ mod secrets;
 
 use crate::cubed_host::CubedHostClient;
 use crate::handler::GENERAL_GROUP;
-use serenity::{framework::StandardFramework, Client};
+use serenity::{framework::StandardFramework, model::id::UserId, Client};
 
 #[tokio::main]
 async fn main() {
@@ -14,7 +14,10 @@ async fn main() {
         println!("{:}", serde_json::to_string_pretty(&s).unwrap());
 
         let framework = StandardFramework::new()
-            .configure(|c| c.on_mention(Some(serenity::model::id::UserId(s.discord.client_id))))
+            .configure(|c| {
+                c.on_mention(Some(UserId(s.discord.client_id)))
+                    .with_whitespace(true)
+            })
             .group(&GENERAL_GROUP);
 
         let client = Client::new(s.discord.bot_token)

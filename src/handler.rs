@@ -1,4 +1,5 @@
 use crate::cubed_host::CubedHostClient;
+use serenity::utils::MessageBuilder;
 use serenity::{
     client::Context,
     framework::standard::{
@@ -34,7 +35,8 @@ impl serenity::prelude::TypeMapKey for CubedHostClient {
 struct General;
 
 #[command]
-async fn restart_server(ctx: &Context) -> CommandResult {
+#[aliases("restart", "restart server", "turn me off then on")]
+async fn restart_server(ctx: &Context, msg: &Message) -> CommandResult {
     println!("Received command 'restart_server'");
     let data = ctx.data.read().await;
     let ch_client = data.get::<CubedHostClient>().unwrap();
@@ -43,6 +45,21 @@ async fn restart_server(ctx: &Context) -> CommandResult {
         .restart_server()
         .await
         .expect("Err when restarting the Cubed Host server!");
+
+    if let Err(why) = msg
+        .channel_id
+        .say(
+            &ctx.http,
+            MessageBuilder::new()
+                .push("User ")
+                .push_bold_safe(&msg.author.name)
+                .push(" successfully restarted the server!")
+                .build(),
+        )
+        .await
+    {
+        println!("Error sending message: {:?}", why);
+    }
 
     Ok(())
 }
