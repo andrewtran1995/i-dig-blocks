@@ -1,65 +1,33 @@
 use crate::cubed_host::CubedHostClient;
-use serenity::utils::MessageBuilder;
 use serenity::{
     client::Context,
-    framework::standard::{
-        macros::{command, group},
-        CommandResult,
-    },
+    framework::standard::macros::{help, hook},
+    framework::standard::{help_commands, Args, CommandGroup, CommandResult, HelpOptions},
     model::channel::Message,
-    prelude::EventHandler,
+    model::prelude::UserId,
 };
+use std::collections::HashSet;
 
-pub struct Handler;
+#[help]
+#[command_not_found_text = "Could not find: '{}. :x:"]
+pub async fn help(
+    context: &Context,
+    msg: &Message,
+    args: Args,
+    help_options: &'static HelpOptions,
+    groups: &[&'static CommandGroup],
+    owners: HashSet<UserId>,
+) -> CommandResult {
+    help_commands::with_embeds(context, msg, args, help_options, groups, owners).await;
+    Ok(())
+}
 
-#[serenity::async_trait]
-impl EventHandler for Handler {
-    async fn message(&self, ctx: Context, msg: Message) {
-        match msg.content.as_str() {
-            "!ping" => {
-                if let Err(why) = msg.channel_id.say(&ctx.http, "Pong!").await {
-                    println!("Error sending message: {:?}", why)
-                }
-            }
-            _ => println!("Unknown message: {}", msg.content),
-        }
-    }
+#[hook]
+pub async fn before(_: &Context, _: &Message, command_name: &str) -> bool {
+    println!("Received command: {}", command_name);
+    true
 }
 
 impl serenity::prelude::TypeMapKey for CubedHostClient {
     type Value = CubedHostClient;
-}
-
-#[group]
-#[commands(restart_server)]
-struct General;
-
-#[command]
-#[aliases("restart", "restart server", "turn me off then on")]
-async fn restart_server(ctx: &Context, msg: &Message) -> CommandResult {
-    println!("Received command 'restart_server'");
-    let data = ctx.data.read().await;
-    let ch_client = data.get::<CubedHostClient>().unwrap();
-
-    ch_client
-        .restart_server()
-        .await
-        .expect("Err when restarting the Cubed Host server!");
-
-    if let Err(why) = msg
-        .channel_id
-        .say(
-            &ctx.http,
-            MessageBuilder::new()
-                .push("User ")
-                .push_bold_safe(&msg.author.name)
-                .push(" successfully restarted the server!")
-                .build(),
-        )
-        .await
-    {
-        println!("Error sending message: {:?}", why);
-    }
-
-    Ok(())
 }

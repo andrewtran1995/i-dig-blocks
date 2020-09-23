@@ -1,17 +1,21 @@
+mod commands;
 mod cubed_host;
 mod handler;
 mod secrets;
 
+use crate::commands::{CUBEDHOST_GROUP, GENERAL_GROUP};
 use crate::cubed_host::CubedHostClient;
-use crate::handler::GENERAL_GROUP;
+use crate::handler::{before, HELP};
 use serenity::{framework::StandardFramework, model::id::UserId, Client};
 
 #[tokio::main]
 async fn main() {
     let mut client = {
         let s = secrets::Secrets::new().expect("Error parsing 'secrets.toml'");
-        println!("Parsed secrets are:");
-        println!("{:}", serde_json::to_string_pretty(&s).unwrap());
+        println!(
+            "Parsed secrets are:\n{:}",
+            serde_json::to_string_pretty(&s).unwrap()
+        );
 
         let framework = StandardFramework::new()
             .configure(|c| {
@@ -19,10 +23,12 @@ async fn main() {
                     .with_whitespace(true)
                     .case_insensitivity(true)
             })
-            .group(&GENERAL_GROUP);
+            .help(&HELP)
+            .before(before)
+            .group(&GENERAL_GROUP)
+            .group(&CUBEDHOST_GROUP);
 
         let client = Client::new(s.discord.bot_token)
-            .event_handler(handler::Handler)
             .framework(framework)
             .await
             .expect("Err creating client");

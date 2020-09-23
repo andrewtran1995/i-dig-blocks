@@ -1,5 +1,6 @@
 use reqwest::header::HeaderMap;
 use reqwest::Response;
+use serde::Deserialize;
 
 const ENDPOINT: &str = "https://prisma.cubedhost.com/api";
 
@@ -17,6 +18,7 @@ impl Headers {
     }
 }
 
+#[derive(Clone)]
 pub struct CubedHostClient {
     pub server_id: String,
     pub api_key: String,
@@ -41,10 +43,27 @@ impl CubedHostClient {
             .error_for_status()
     }
 
+    pub async fn get_players(&self) -> Result<Response, reqwest::Error> {
+        reqwest::Client::new()
+            .get(format!("{}/server/{}/players", ENDPOINT, self.server_id).as_str())
+            .headers(self.construct_headers())
+            .send()
+            .await?
+            .error_for_status()
+    }
+
     fn construct_headers(&self) -> HeaderMap {
         let mut h = HeaderMap::new();
         h.insert(Headers::ApiKey.as_str(), self.api_key.parse().unwrap());
         h.insert(Headers::ApiUser.as_str(), self.api_user.parse().unwrap());
         h
     }
+}
+
+pub type GetPlayersResponse = Vec<Player>;
+
+#[derive(Deserialize)]
+pub struct Player {
+    pub name: String,
+    pub status: u64,
 }
