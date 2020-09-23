@@ -17,6 +17,7 @@ async fn main() {
             .configure(|c| {
                 c.on_mention(Some(UserId(s.discord.client_id)))
                     .with_whitespace(true)
+                    .case_insensitivity(true)
             })
             .group(&GENERAL_GROUP);
 
