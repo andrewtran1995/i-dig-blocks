@@ -6,7 +6,7 @@ mod secrets;
 use crate::commands::{CUBEDHOST_GROUP, GENERAL_GROUP};
 use crate::cubed_host::CubedHostClient;
 use crate::handler::{before, HELP};
-use serenity::{framework::StandardFramework, model::id::UserId, Client};
+use serenity::{framework::StandardFramework, Client};
 
 #[tokio::main]
 async fn main() {
@@ -19,7 +19,7 @@ async fn main() {
 
         let framework = StandardFramework::new()
             .configure(|c| {
-                c.on_mention(Some(UserId(s.discord.client_id)))
+                c.prefix("!")
                     .with_whitespace(true)
                     .case_insensitivity(true)
             })

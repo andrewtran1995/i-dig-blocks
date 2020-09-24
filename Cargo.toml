@@ -4,11 +4,6 @@ version = "0.1.0"
 authors = ["andrewtran1995 <andrew.tran345@gmail.com>"]
 edition = "2018"
 
-# Instructions on targeting Raspberry Pi 0:
-# https://chacin.dev/blog/cross-compiling-rust-for-the-raspberry-pi/
-[target.arm-unknown-linux-gnueabihf]
-linker = "arm-linux-gnueabihf-gcc"
-
 [dependencies]
 config = "0.10.1"
 json = "0.12.4"
