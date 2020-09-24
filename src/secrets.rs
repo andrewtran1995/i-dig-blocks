@@ -1,4 +1,4 @@
-use config::{ConfigError, File};
+use config::{ConfigError, File, FileFormat};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -24,7 +24,11 @@ pub struct Discord {
 impl Secrets {
     pub fn new() -> Result<Self, ConfigError> {
         let mut s = config::Config::default();
-        s.merge(File::with_name("secrets.toml"))?;
+        s.merge(File::from_str(
+            include_str!("../secrets.toml"),
+            FileFormat::Toml,
+        ))?;
+        // s.merge(File::with_name("secrets.toml"))?;
         s.try_into()
     }
 }
