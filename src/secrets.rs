@@ -28,7 +28,6 @@ impl Secrets {
             include_str!("../secrets.toml"),
             FileFormat::Toml,
         ))?;
-        // s.merge(File::with_name("secrets.toml"))?;
         s.try_into()
     }
 }
