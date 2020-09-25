@@ -34,6 +34,16 @@ impl CubedHostClient {
             .await
     }
 
+    pub async fn is_server_running(&self) -> Result<bool, reqwest::Error> {
+        Ok(self
+            .get_server_config()
+            .await?
+            .json::<GetServerConfigResponse>()
+            .await?
+            .server
+            .ping())
+    }
+
     pub async fn restart_server(&self) -> Result<Response, reqwest::Error> {
         reqwest::Client::new()
             .post(format!("{}/server/{}/restart", ENDPOINT, self.server_id).as_str())
@@ -57,6 +67,23 @@ impl CubedHostClient {
         h.insert(Headers::ApiKey.as_str(), self.api_key.parse().unwrap());
         h.insert(Headers::ApiUser.as_str(), self.api_user.parse().unwrap());
         h
+    }
+}
+
+#[derive(Deserialize)]
+struct GetServerConfigResponse {
+    pub server: Server,
+}
+
+#[derive(Deserialize)]
+struct Server {
+    ip: String,
+    port: u16,
+}
+
+impl Server {
+    fn ping(&self) -> bool {
+        craftping::ping(&self.ip, self.port).is_ok()
     }
 }
 

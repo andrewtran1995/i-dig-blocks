@@ -23,8 +23,37 @@ async fn ping(ctx: &Context, msg: &Message) -> CommandResult {
 }
 
 #[group]
-#[commands(restart_server, get_players)]
+#[commands(alive, restart_server, get_players)]
 pub struct CubedHost;
+
+#[command]
+#[aliases("serverAlive", "areYouThere", "statusReport")]
+async fn alive(ctx: &Context, msg: &Message) -> CommandResult {
+    let is_alive = get_cubed_host_client(ctx)
+        .await
+        .is_server_running()
+        .await
+        .expect("Err pinging server");
+
+    if let Err(why) = msg
+        .channel_id
+        .say(
+            &ctx.http,
+            MessageBuilder::new()
+                .push(if is_alive {
+                    "We're good to go! :tada:"
+                } else {
+                    "There's no pulse :head_bandage:"
+                })
+                .build(),
+        )
+        .await
+    {
+        println!("Error sending message: {:?}", why)
+    }
+
+    Ok(())
+}
 
 #[command]
 #[aliases("restart", "turnMeOffThenOn")]
@@ -37,7 +66,7 @@ async fn restart_server(ctx: &Context, msg: &Message) -> CommandResult {
             &ctx.http,
             MessageBuilder::new()
                 .push_bold_safe(&msg.author.name)
-                .push(" successfully restarted the server!")
+                .push(" successfully restarted the server! :confetti_ball:")
                 .build(),
         )
         .await
