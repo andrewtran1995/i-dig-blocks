@@ -3,6 +3,8 @@ name = "discord-cubedhost-bot"
 version = "0.1.0"
 authors = ["andrewtran1995 <andrew.tran345@gmail.com>"]
 edition = "2018"
+readme = "README.md"
+repository = "https://github.com/andrewtran1995/i-dig-blocks"
 
 [dependencies]
 config = "0.10.1"
