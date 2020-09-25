@@ -7,8 +7,14 @@ edition = "2018"
 [dependencies]
 config = "0.10.1"
 json = "0.12.4"
+# openssl-sys is an indirect dependency of reqwest, which is needed
+# as a vendored dependency when cross-compiling.
+openssl-sys = { version = "*", features = ["vendored"] }
 reqwest = { version = "0.10.8", features = ["json"] }
-serde = {version = "1.0.116", features = ["derive"]}
+serde = { version = "1.0.116", features = ["derive"] }
 serde_json = "1.0.57"
 serenity = "0.9.0-rc.1"
 tokio = "0.2.22"
+
+[profile.release]
+overflow-checks = true

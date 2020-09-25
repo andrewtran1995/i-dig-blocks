@@ -2,5 +2,7 @@
 
 # Instructions on targeting Raspberry Pi 0:
 # https://chacin.dev/blog/cross-compiling-rust-for-the-raspberry-pi/
+# Note that pre-built Windows toolchains can be downloded here:
+# https://gnutoolchains.com/raspberry/
 [target.arm-unknown-linux-gnueabihf]
 linker = "arm-linux-gnueabihf-gcc"
