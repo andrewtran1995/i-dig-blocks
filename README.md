@@ -4,7 +4,7 @@ A simple Discord bot to interact with [CubedHost APIs](https://github.com/CubedH
 Built using [Rust](https://www.rust-lang.org/) with [Serenity](https://github.com/serenity-rs/serenity).
 
 ## Compiling for the Raspberry Pi
-This project can be targeted for a Raspberry Pi ([all models](https://www.raspberrypi.org/downloads/) should be compatible with the Raspberry Pi OS).
+This project can be targeted for a Raspberry Pi (all models should be compatible with the [Raspberry Pi OS](https://www.raspberrypi.org/downloads/)).
 
 The release binary can be compiled with the following commands.
 ### Compiling with downloaded toolchains
