@@ -23,11 +23,11 @@ async fn ping(ctx: &Context, msg: &Message) -> CommandResult {
 }
 
 #[group]
-#[commands(alive, restart_server, get_players)]
-pub struct CubedHost;
+#[commands(alive, restart, players)]
+pub struct Minecraft;
 
 #[command]
-#[aliases("serverAlive", "areYouThere", "statusReport")]
+#[aliases("isServerAlive", "areYouThere", "statusReport")]
 async fn alive(ctx: &Context, msg: &Message) -> CommandResult {
     let is_alive = get_cubed_host_client(ctx)
         .await
@@ -56,8 +56,8 @@ async fn alive(ctx: &Context, msg: &Message) -> CommandResult {
 }
 
 #[command]
-#[aliases("restart", "turnMeOffThenOn")]
-async fn restart_server(ctx: &Context, msg: &Message) -> CommandResult {
+#[aliases("restartServer", "turnMeOffThenOn")]
+async fn restart(ctx: &Context, msg: &Message) -> CommandResult {
     get_cubed_host_client(ctx).await.restart_server().await?;
 
     if let Err(why) = msg
@@ -78,8 +78,8 @@ async fn restart_server(ctx: &Context, msg: &Message) -> CommandResult {
 }
 
 #[command]
-#[aliases("players", "whoThere")]
-async fn get_players(ctx: &Context, msg: &Message) -> CommandResult {
+#[aliases("getPlayers", "whoThere")]
+async fn players(ctx: &Context, msg: &Message) -> CommandResult {
     let players: Vec<String> = get_cubed_host_client(ctx)
         .await
         .get_players()

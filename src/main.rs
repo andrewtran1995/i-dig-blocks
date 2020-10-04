@@ -3,7 +3,7 @@ mod cubed_host;
 mod handler;
 mod secrets;
 
-use crate::commands::{CUBEDHOST_GROUP, GENERAL_GROUP};
+use crate::commands::{GENERAL_GROUP, MINECRAFT_GROUP};
 use crate::cubed_host::CubedHostClient;
 use crate::handler::{before, HELP};
 use serenity::{framework::StandardFramework, Client};
@@ -18,15 +18,11 @@ async fn main() {
         );
 
         let framework = StandardFramework::new()
-            .configure(|c| {
-                c.prefix("!")
-                    .with_whitespace(true)
-                    .case_insensitivity(true)
-            })
+            .configure(|c| c.prefix("!").with_whitespace(true).case_insensitivity(true))
             .help(&HELP)
             .before(before)
             .group(&GENERAL_GROUP)
-            .group(&CUBEDHOST_GROUP);
+            .group(&MINECRAFT_GROUP);
 
         let client = Client::new(s.discord.bot_token)
             .framework(framework)
