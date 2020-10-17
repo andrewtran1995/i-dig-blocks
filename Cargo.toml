@@ -7,6 +7,7 @@ readme = "README.md"
 repository = "https://github.com/andrewtran1995/i-dig-blocks"
 
 [dependencies]
+chrono = "0.4.19"
 config = "0.10.1"
 craftping = "*"
 json = "0.12.4"

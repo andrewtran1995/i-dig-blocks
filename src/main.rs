@@ -1,12 +1,13 @@
-mod commands;
-mod cubed_host;
-mod handler;
-mod secrets;
+use serenity::{framework::StandardFramework, Client};
 
 use crate::commands::{GENERAL_GROUP, MINECRAFT_GROUP};
 use crate::cubed_host::CubedHostClient;
 use crate::handler::{before, HELP};
-use serenity::{framework::StandardFramework, Client};
+
+mod commands;
+mod cubed_host;
+mod handler;
+mod secrets;
 
 #[tokio::main]
 async fn main() {

@@ -1,4 +1,3 @@
-use crate::cubed_host::{CubedHostClient, GetPlayersResponse};
 use serenity::{
     framework::standard::{
         macros::{command, group},
@@ -8,6 +7,8 @@ use serenity::{
     prelude::Context,
     utils::MessageBuilder,
 };
+
+use crate::cubed_host::{CubedHostClient, GetPlayersResponse};
 
 #[group]
 #[commands(ping)]
